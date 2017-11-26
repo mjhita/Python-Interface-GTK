@@ -11,7 +11,7 @@ DROP TABLE IF EXISTS Amigos;
 CREATE TABLE Amigos (
     Amigo_no    INT        , 
     Nombre      VARCHAR(40), 
-    Apellidos   VARCHAR(40), 
+    Procedencia VARCHAR(40), 
     EnComun     VARCHAR(40), 
     Telefono    VARCHAR(20), 
     Email       VARCHAR(40)
