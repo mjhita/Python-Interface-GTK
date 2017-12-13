@@ -1,6 +1,20 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-
+############################################################################
+#
+# Curso Tratamiento de datos, juegos y programación gráfica en Python
+#
+# TEMA: Interfaces gráficas con PyGTK.
+#
+# Tarea CRUD. Interfaz gráfica que permita Crear, Obtener, Actualizar
+#             y Borrar elementos de una base de datos
+#             
+#
+# Las ordenes para crear la base de datos y la tabla están en el archivo:
+#     DBManuel.sql
+# Implementado por: Manuel Jesús Hita Jiménez - 2017
+#
+############################################################################
 from gi.repository import Gtk, GObject
 import MySQLdb
 import time
@@ -22,7 +36,7 @@ class AmigosManuelGUI:
 
          Las operaciones, accesibles a través del menú (opción Operaciones) permiten:
            - Actualizar y Borrar el elemento seleccionado en la lista
-           - Obtener.  Hace una busqueda por Nombre
+           - Obtener elemento, hace una busqueda por Nombre
            - Crear nuevos elementos
 
          Incluye la gestión de conexión y desconexión a la base de datos
@@ -57,7 +71,8 @@ class AmigosManuelGUI:
         self.about = self.builder.get_object("dialogoAcercaDe")
         self.modeloLista = self.builder.get_object('listItems')
         self.lista = self.builder.get_object('treeIds')
-
+        
+        # Defino las columnas de la lista TreeView 
         column = Gtk.TreeViewColumn('Id', Gtk.CellRendererText(), text=0)   
         column.set_clickable(True)   
         column.set_resizable(True)   
@@ -140,6 +155,10 @@ class AmigosManuelGUI:
         self.ponModoOperacion()
 
     def onCambiarSeleccion(self,reeSelection):
+        """
+           Evento provocado por el cambio de elemento seleccionado de la lista
+         
+        """ 
         self.cargarAmigo()
 
     def idAmigoNuevo(self):
@@ -251,6 +270,7 @@ class AmigosManuelGUI:
                     self.Conexion.commit()
                     self.cargarLista()
                     self.ponerDatosEnBlanco()
+                    self.ponerIdSeleccionado(str(idAmigo))
             except MySQLdb.Error, e:
                 mensajeErrorSQL(e)
                 self.statusbar.push(self.idStatusBar, "ERROR no se ha podido crear amigo")
@@ -305,12 +325,13 @@ class AmigosManuelGUI:
             try:
                 self.Cursor.execute(query)
                 self.Conexion.commit()
+                idSel = self.idSeleccionado 
                 self.cargarLista()
+                self.ponerIdSeleccionado(idSel)
                 self.ponerDatosEdicion()
             except MySQLdb.Error, e:
                 mensajeErrorSQL(e)
-                self.statusbar.push(self.idStatusBar, "ERROR no se han podido modificar los datos del amigo")
-        self.ponerDatosEnBlanco()    
+                self.statusbar.push(self.idStatusBar, "ERROR no se han podido modificar los datos del amigo")   
 
     def borrarAmigo(self):
         """
