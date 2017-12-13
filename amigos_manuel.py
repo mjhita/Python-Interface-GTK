@@ -13,6 +13,20 @@ def mensajeErrorSQL(e):
 
 
 class AmigosManuelGUI:
+    """
+         Clase que implementa la interfaz gráfica que permita Crear, Obtener, Actualizar
+         y Borrar elementos de la base de datos de Amigos de Manuel (DBManuel)
+         
+         Visualiza una lista (treeview) a la izquierda con los registros existentes en
+         la tabla de amigos, mostrando en cada fila el Id y Nombre de cada uno de los amigos
+
+         Las operaciones, accesibles a través del menú (opción Operaciones) permiten:
+           - Actualizar y Borrar el elemento seleccionado en la lista
+           - Obtener.  Hace una busqueda por Nombre
+           - Crear nuevos elementos
+
+         Incluye la gestión de conexión y desconexión a la base de datos
+    """
     def __init__(self):
         self.builder = Gtk.Builder()
         self.builder.add_from_file("amigos_manuel.glade")
@@ -44,7 +58,7 @@ class AmigosManuelGUI:
         self.modeloLista = self.builder.get_object('listItems')
         self.lista = self.builder.get_object('treeIds')
 
-        column = Gtk.TreeViewColumn('id', Gtk.CellRendererText(), text=0)   
+        column = Gtk.TreeViewColumn('Id', Gtk.CellRendererText(), text=0)   
         column.set_clickable(True)   
         column.set_resizable(True)   
         self.lista.append_column(column)
@@ -160,7 +174,7 @@ class AmigosManuelGUI:
     def cargarDatosRegistro(self, registro):
         """
             Vuelca los datos del registro "registro" en los campos de edición de la
-            ventana grafica
+            interfaz gráfica
         """
         self.edNombre.set_text(registro[1])
         self.edEnComun.set_text(registro[3])
@@ -341,6 +355,12 @@ class AmigosManuelGUI:
         self.about.hide()
 
     def ponModoOperacion(self):
+        """
+            Se llama al pulsar las opcioes del menu Operaciones
+            Gesiona el botón para realizar la operación, da inforamción sobre la operación
+            en la barra de estado, activa o desactiva los controles necesarios para la operación
+            y pone la varible que modoOperacion con un valor que indica la operación seleccionada
+        """    
         if self.modoOperacion == 0:
             self.btOperacion.hide()
             self.statusbar.push(self.idStatusBar, "Elija una opción del menú Operaciones.")

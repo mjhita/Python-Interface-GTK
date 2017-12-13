@@ -168,6 +168,8 @@
             <property name="width_request">0</property>
             <property name="visible">True</property>
             <property name="can_focus">False</property>
+            <property name="margin_left">7</property>
+            <property name="margin_right">5</property>
             <child>
               <object class="GtkBox" id="box4">
                 <property name="visible">True</property>
@@ -177,6 +179,8 @@
                   <object class="GtkLabel" id="label2">
                     <property name="visible">True</property>
                     <property name="can_focus">False</property>
+                    <property name="margin_left">5</property>
+                    <property name="margin_right">6</property>
                     <property name="label" translatable="yes">Lista de amigos</property>
                   </object>
                   <packing>
@@ -196,11 +200,10 @@
                         <property name="no_show_all">True</property>
                         <property name="valign">baseline</property>
                         <property name="model">listItems</property>
-                        <signal name="move-cursor" handler="onMoveCursor" swapped="no"/>
-                        <signal name="row-activated" handler="onRowActivate" swapped="no"/>
-                        <signal name="select-cursor-row" handler="onSelecCursor" swapped="no"/>
                         <child internal-child="selection">
-                          <object class="GtkTreeSelection" id="treeview-selection1"/>
+                          <object class="GtkTreeSelection" id="treeview-selection1">
+                            <signal name="changed" handler="onCambiarSeleccion" swapped="no"/>
+                          </object>
                         </child>
                       </object>
                     </child>
@@ -213,7 +216,7 @@
                 </child>
               </object>
               <packing>
-                <property name="expand">False</property>
+                <property name="expand">True</property>
                 <property name="fill">True</property>
                 <property name="position">0</property>
               </packing>
@@ -299,6 +302,7 @@
                       <object class="GtkEntry" id="edNombre">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="margin_left">4</property>
                       </object>
                       <packing>
                         <property name="left_attach">0</property>
@@ -339,6 +343,7 @@
                       <object class="GtkEntry" id="edEmail">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
+                        <property name="margin_right">5</property>
                       </object>
                       <packing>
                         <property name="left_attach">4</property>
@@ -375,7 +380,7 @@
                     <property name="receives_default">True</property>
                     <property name="halign">end</property>
                     <property name="margin_left">19</property>
-                    <property name="margin_right">11</property>
+                    <property name="margin_right">13</property>
                     <property name="relief">half</property>
                     <property name="use_stock">True</property>
                     <property name="xalign">0</property>
