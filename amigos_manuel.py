@@ -19,6 +19,13 @@ from gi.repository import Gtk, GObject
 import MySQLdb
 import time
 
+# Constantes
+NO_OPERACION = 0
+OP_CREAR = 1
+OP_OBTENER = 2
+OP_ACTUALIZAR = 3
+OP_BORRAR = 4
+
 def mensajeErrorSQL(e):
    try:
         print "MySQL Error [%d]: %s" % (e.args[0], e.args[1])
@@ -84,7 +91,7 @@ class AmigosManuelGUI:
         self.lista.append_column(column)
         
         self.window.show_all()
-        self.modoOperacion = 0  # No operacio, 1 Crear Amigo, 2 Obtener, 3 Actual, 4 Borrar
+        self.modoOperacion = NO_OPERACION  # NO_OPERACION, OP_CREAR, OP_BORRAR ...
         self.ponModoOperacion() 
         self.Conexion = None
         self.Cursor = None
@@ -139,19 +146,19 @@ class AmigosManuelGUI:
         Gtk.main_quit(*args)
        
     def onCrearAmigo(self, menuitem ):
-        self.modoOperacion = 1
+        self.modoOperacion = OP_CREAR
         self.ponModoOperacion()
 
     def onObtenerAmigo(self, menuitem):
-        self.modoOperacion = 2
+        self.modoOperacion = OP_OBTENER
         self.ponModoOperacion()
     
     def onActualizarAmigo(self, menuitem):
-        self.modoOperacion = 3
+        self.modoOperacion = OP_ACTUALIZAR
         self.ponModoOperacion()
 
     def onBorrarAmigo(self, menuitem):
-        self.modoOperacion = 4
+        self.modoOperacion = OP_BORRAR
         self.ponModoOperacion()
 
     def onCambiarSeleccion(self,reeSelection):
@@ -351,22 +358,22 @@ class AmigosManuelGUI:
             self.statusbar.push(self.idStatusBar, "ERROR no se ha podido borrar el amigo")
         
     def onBtnOperacionClicked(self, button):
-        if self.modoOperacion == 1:
+        if self.modoOperacion == OP_CREAR:
             self.crearAmigo()
-        elif self.modoOperacion == 2:
+        elif self.modoOperacion == OP_OBTENER:
             self.obtenerAmigo()
-        elif self.modoOperacion == 3:
+        elif self.modoOperacion == OP_ACTUALIZAR:
             self.obtenerIdSeleccionado()
             if self.idSeleccionado:
                 self.actualizarAmigo()
             else:
                 self.ponerDatosEnBlanco()
             self.activarCamposEdicion(False)    
-        elif self.modoOperacion == 4:
+        elif self.modoOperacion == OP_BORRAR:
             if self.idSeleccionado:
                 self.borrarAmigo()
   
-        self.modoOperacion = 0
+        self.modoOperacion = NO_OPERACION
         self.ponModoOperacion()
 
     def onAcercaDe(self, menuitem):
@@ -382,31 +389,31 @@ class AmigosManuelGUI:
             en la barra de estado, activa o desactiva los controles necesarios para la operación
             y pone la varible que modoOperacion con un valor que indica la operación seleccionada
         """    
-        if self.modoOperacion == 0:
+        if self.modoOperacion == NO_OPERACION:
             self.btOperacion.hide()
             self.statusbar.push(self.idStatusBar, "Elija una opción del menú Operaciones.")
-        elif self.modoOperacion == 1:
+        elif self.modoOperacion == OP_CREAR:
             self.btOperacion.set_label("Crear nuevo amigo")
             self.activarCamposEdicion(True)
             self.ponerDatosEnBlanco()
             self.btOperacion.show()
             self.statusbar.push(self.idStatusBar,
                                 "Introduzca los datos de un nuevo amigo y pulse el botón 'Crear nuevo amigo'")
-        elif self.modoOperacion == 2:
+        elif self.modoOperacion == OP_OBTENER:
             self.btOperacion.set_label("Obtener amigo")
             self.btOperacion.show()
             self.ponerDatosEnBlanco()
             self.edNombre.set_sensitive(True)
             self.statusbar.push(self.idStatusBar,
                                 "Introduzca nombre de amigo y pulse el botón 'Obtener amigo'")
-        elif self.modoOperacion == 3:
+        elif self.modoOperacion == OP_ACTUALIZAR:
             self.btOperacion.set_label("Actualizar datos")
             self.btOperacion.show()
             self.activarCamposEdicion(True)
             self.cargarAmigo()
             self.statusbar.push(self.idStatusBar,
                                 "Modifique los datos del amigo seleccionado y pulse 'Actualizar datos'")
-        elif self.modoOperacion == 4:
+        elif self.modoOperacion == OP_BORRAR:
             self.btOperacion.set_label("Borrar amigo")
             self.btOperacion.show()
             self.statusbar.push(self.idStatusBar,
